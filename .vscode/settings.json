@@ -5,6 +5,7 @@
         "**/bin": true,
         "**/obj": true,
         "**/node_modules": true,
-        "project.lock.json": true
+        "project.lock.json": true,
+        "**/Projects": true
     }
 }
