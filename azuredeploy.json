@@ -1,0 +1,60 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix used to name the Web Apps and App Service Plan."
+      }
+    }
+  },
+  "variables": {
+      "hostingPlanName": "[concat(parameters('namePrefix'), '-plan')]",
+      "apiSiteName": "[concat(parameters('namePrefix'), '-api')]",
+      "webSiteName": "[concat(parameters('namePrefix'), '-web')]",
+      "apiRepoURL": "https://github.com/pretend-azured/api.git"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "S1",
+        "capacity": "0"
+      },
+      "properties": {
+        "name": "[variables('hostingPlanName')]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('apiSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[variables('hostingPlanName')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('apiSiteName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[variables('apiRepoURL')]",
+            "branch": "master",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ]
+}
