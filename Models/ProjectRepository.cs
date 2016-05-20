@@ -19,7 +19,7 @@ namespace Azured.Web.Api.Models
             _logger = logger;
             
             _projects = new ConcurrentDictionary<string, Project>();
-            string projectsFolder = @"Projects\";
+            string projectsFolder = @"Project\";
             foreach(DirectoryInfo directory in new DirectoryInfo(projectsFolder).GetDirectories())
             {
                 string projectName = directory.Name;

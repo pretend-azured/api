@@ -1,0 +1,3 @@
+[submodule "Projects"]
+	path = Projects
+	url = git@github.com:pretend-azured/projects.git
